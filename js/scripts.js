@@ -68,6 +68,16 @@ function Clock () {
 
     this.displayCurrentTime = function () {
         $('.main-display').text(formatTime(currentTime));
+        if (mode === "Session" && $('.progress-radial').hasClass('break')) {
+            $('.progress-radial').removeClass('break').addClass('session');
+        } else if (mode === "Break" && $('.progress-radial').hasClass('session')) {
+            $('.progress-radial').removeClass('session').addClass('break');
+        }
+        $('.progress-radial').attr('class', function(index, currentValue) {
+            return currentValue.replace(/(^|\s)step-\S+/g, " step-" + (100 - parseInt((currentTime / startTime) * 100)));
+        });
+
+        console.log($('.progress-radial').attr('class'));
     }
 
     this.displaySessionTime = function () {
@@ -82,11 +92,11 @@ function Clock () {
     this.displaySessionCount = function() {
         //If our session count is 0, we should show the text Pomodoro Clock
         if (sessionCount === 0) {
-            $('.session-count').html("<h2>Pomodoro Clock</h2>");
+            $('.session-count').html("<h1>Pomodoro Clock</h1>");
         } else if (mode === "Session") {
-            $('.session-count').html("<h2>Session " + sessionCount + "</h2>");
+            $('.session-count').html("<h1>Session " + sessionCount + "</h1>");
         } else if (mode === "Break") {
-            $('.session-count').html("<h2>Break</h2>")
+            $('.session-count').html("<h1>Break</h1>")
         }
     }
 
